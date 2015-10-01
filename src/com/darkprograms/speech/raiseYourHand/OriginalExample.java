@@ -8,14 +8,12 @@ import com.darkprograms.speech.recognizer.GSpeechDuplex;
 import com.darkprograms.speech.recognizer.GSpeechResponseListener;
 import com.darkprograms.speech.recognizer.GoogleResponse;
 
-public class Main {
+public class OriginalExample {
 
 	public static void main(String[] args) {
-		GSpeechDuplex dup = new GSpeechDuplex(ConfigVariables.key);// Instantiate
-																	// the API
+		GSpeechDuplex dup = new GSpeechDuplex(ConfigVariables.GOOGLE_API_KEY); // Instantiate the API
 
-		dup.addResponseListener(new GSpeechResponseListener() {// Adds the
-																// listener
+		dup.addResponseListener(new GSpeechResponseListener() {// Adds the listener
 			public void onResponse(GoogleResponse gr) {
 				System.out.println("Google thinks you said: "
 						+ gr.getResponse());
@@ -42,10 +40,8 @@ public class Main {
 				Thread.sleep(10000);// Records for 10 seconds
 				mic.close();// Stops recording
 				// Sends 10 second voice recording to Google
-				byte[] data = Files.readAllBytes(mic.getAudioFile().toPath());// Saves
-																				// data
-																				// into
-																				// memory.
+				byte[] data = Files.readAllBytes(mic.getAudioFile().toPath());// Saves data into memory
+
 				dup.recognize(data, (int) mic.getAudioFormat().getSampleRate());
 				mic.getAudioFile().delete();// Deletes Buffer file
 				// REPEAT

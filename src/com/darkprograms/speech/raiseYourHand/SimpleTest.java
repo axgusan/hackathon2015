@@ -8,7 +8,11 @@ public class SimpleTest {
 		GooglesAnswer theResult;
 
 		System.out.println("INFO: Attempting to start audio capture.");
-		mcontroller.startAudioCapture();
+		
+//		Thread t=new Thread(new EventDrivenSpeachToTextController());
+//		t.run();
+		
+		
 		try {
 			System.out.println("INFO: Waiting for 5 sec while recording.");
 			Thread.sleep(5000);
@@ -16,8 +20,12 @@ public class SimpleTest {
 			e.printStackTrace();
 		}// Records for 5 seconds
 		
+		System.out.println("INFO: Hitting STOP.");
+		
+		
+		
 		System.out.println("INFO: Attempting to end audio capture.");
-		theResult = mcontroller.endAudioCapture();
+		
 
 		System.out.println("INFO: ↓↓↓↓↓↓↓↓RESULTS RECIEVED↓↓↓↓↓↓↓↓");
 		System.out.println("INFO: best guess    > " + theResult.getBestGuess());

@@ -11,6 +11,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/Users/gusaa/Documents/Cloned-Repositories/Hackathon2015/java-speech-api/javaFlacEncoder-0.3.1-all/javaFlacEncoder-0.3.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/J4K_JARS"/>
+	<classpathentry kind="lib" path="C:/Git/java-speech-api/javaFlacEncoder-0.3.1-all/javaFlacEncoder-0.3.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

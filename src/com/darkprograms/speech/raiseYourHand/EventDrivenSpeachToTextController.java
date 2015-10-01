@@ -23,10 +23,8 @@ public class EventDrivenSpeachToTextController implements Runnable {
 		final GSpeechDuplex dup = new GSpeechDuplex(
 				ConfigVariables.GOOGLE_API_KEY);
 
-		// reinitialize in case reused
+			// reinitialize in case reused
 		boolean stopRecording = false;
-		//boolean messageRecieved = false;
-		googleSaid.setBestGuess(null);
 
 		// Adds the listener
 		dup.addResponseListener(new GSpeechResponseListener() {

@@ -103,8 +103,9 @@ public class EventDrivenSpeachToTextController implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		messageRecieved=true;//reinitialize in case will be reused
+		
 		System.out.println("DEBUG: got google reply, transaction complete.");
+		messageRecieved=false;//reinitialize in case will be reused
 		return googleSaid;
 	}
 

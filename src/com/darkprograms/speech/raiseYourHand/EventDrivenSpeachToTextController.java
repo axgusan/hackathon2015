@@ -13,7 +13,8 @@ import com.darkprograms.speech.recognizer.GoogleResponse;
 public class EventDrivenSpeachToTextController implements Runnable {
 
 	private GooglesAnswer googleSaid = new GooglesAnswer();
-	private boolean stopRecording, messageRecieved = false;
+	private boolean stopRecording = false;// user initiated stop recording event
+	private boolean messageRecieved = false;// Received reply from google API
 	private long startTime;
 
 	public void run() {
@@ -21,7 +22,10 @@ public class EventDrivenSpeachToTextController implements Runnable {
 		// Instantiate the API
 		final GSpeechDuplex dup = new GSpeechDuplex(
 				ConfigVariables.GOOGLE_API_KEY);
+
+		// reinitialize in case reused
 		boolean stopRecording = false;
+		//boolean messageRecieved = false;
 		googleSaid.setBestGuess(null);
 
 		// Adds the listener
@@ -87,14 +91,20 @@ public class EventDrivenSpeachToTextController implements Runnable {
 		}
 	}// end startAudioCapture
 
-	public GooglesAnswer endAudioCapture() throws InterruptedException {
+	public GooglesAnswer endAudioCapture() {
 		System.out.println("DEBUG: stop recording flag set");
 		stopRecording = true;
 
+		System.out.println("DEBUG: waiting for google reply");
 		while (messageRecieved == false) {
-			Thread.sleep(100);
-			System.out.println("DEBUG: waiting for google reply");
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		messageRecieved=true;//reinitialize in case will be reused
+		System.out.println("DEBUG: got google reply, transaction complete.");
 		return googleSaid;
 	}
 

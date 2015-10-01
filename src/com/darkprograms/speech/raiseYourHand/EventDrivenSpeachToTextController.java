@@ -68,14 +68,14 @@ public class EventDrivenSpeachToTextController implements Runnable {
 
 			startTime = System.nanoTime();
 
-			while (System.nanoTime() - startTime < ConfigVariables.AUDIO_RECORDING_MAX_LENGTH) {
+			while (true){// System.nanoTime() - startTime < ConfigVariables.AUDIO_RECORDING_MAX_LENGTH) {
 				Thread.sleep(1000);
 				if (stopRecording) {
 					System.out.println("DEBUG: recording stopped");
 					break;
 				}
-				System.out.println("DEBUG: Recording and waiting, time= "
-						+ (System.nanoTime() - startTime));
+				System.out.println("DEBUG: Recording and waiting, time(rounded sec)= "
+						+ (System.nanoTime() - startTime)/1000000000);
 			}
 			mic.close();// Stops recording
 

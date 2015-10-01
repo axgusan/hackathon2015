@@ -10,7 +10,7 @@ public class SimpleTest {
 		System.out.println("INFO: Attempting to start audio capture.");
 
 		Thread t = new Thread(mcontroller);
-		t.run();
+		t.start();
 
 		try {
 			System.out.println("INFO: Waiting for 5 sec while recording.");

@@ -18,6 +18,7 @@ public class EventDrivenSpeachToTextController implements Runnable {
 	private long startTime;
 	private SpeechListener listener;
 	private Object tag;
+	public static Microphone mic ;
 
 	public static EventDrivenSpeachToTextController startAudioCapture(Object tag, SpeechListener listener){
 		EventDrivenSpeachToTextController mcontroller = new EventDrivenSpeachToTextController();
@@ -71,7 +72,7 @@ public class EventDrivenSpeachToTextController implements Runnable {
 
 		// Instantiate microphone and have it record FLAC file.
 		System.out.println("DEBUG: getting the default mic.");
-		Microphone mic = new Microphone(FLACFileWriter.FLAC);
+		
 		System.out.println("DEBUG: default mic dataline is "+mic.getTargetDataLine());
 
 		// The File to record the buffer to.

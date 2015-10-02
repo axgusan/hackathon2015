@@ -37,19 +37,21 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 		String speech ;  // = Gspeech.getCurrent
 		
 		if(gesture.type.equals("LEFT")){
+			if(mcontroller!=null)
+				return;
 
 			mcontroller = EventDrivenSpeachToTextController.startAudioCapture(gesture,this);
 		}
-		if(gesture.type.equals("NONE")){
+		if(gesture.type.equals("LEFT_LOW")&&mcontroller!=null){
 
 			mcontroller.endAudioCapture();
+			mcontroller=null;
 		}
 		
 		
 	}
 	
 
-	@Override
 	public void onReceived(Object gesture, GooglesAnswer answer) {
 		KinectGesture g =(KinectGesture )gesture;
 		

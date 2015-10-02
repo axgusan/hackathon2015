@@ -87,6 +87,16 @@ public class Kinect extends J4KSDK {
     			   System.out.println("The RIGHT hand is raised above the head!!!!!!!!!!!!!!!");
     			   gesture.type = "LEFT";
     		   }
+    		   else if(currentSkeleton.get3DJointY(Skeleton.HAND_RIGHT)<currentSkeleton.get3DJointY(Skeleton.SPINE_MID) )
+    		   {
+    			  // System.out.println("The RIGHT hand is below mid-spine!!!!!!!!!!!!!!!");
+    			   gesture.type = "RIGHT_LOW";
+    		   }
+    		   else if(currentSkeleton.get3DJointY(Skeleton.HAND_LEFT)<currentSkeleton.get3DJointY(Skeleton.SPINE_MID) )
+    		   {
+    			   System.out.println("The LEFT hand is below mid-spine!!!!!!!!!!!!!!!");
+    			   gesture.type = "LEFT_LOW";
+    		   }
     		   
     		   if(! gesture.equals(prevGesture)){
     			   this.registerGestureListener.onReceiveGesture(gesture);

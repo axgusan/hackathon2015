@@ -70,7 +70,9 @@ public class EventDrivenSpeachToTextController implements Runnable {
 		}); // end addResponseListener
 
 		// Instantiate microphone and have it record FLAC file.
+		System.out.println("DEBUG: getting the default mic.");
 		Microphone mic = new Microphone(FLACFileWriter.FLAC);
+		System.out.println("DEBUG: default mic dataline is "+mic.getTargetDataLine());
 
 		// The File to record the buffer to.
 		File file = new File("temp_audio_file.flac");

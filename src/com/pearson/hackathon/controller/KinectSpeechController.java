@@ -18,14 +18,15 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 	NotePanel notePanel;
 	EventDrivenSpeachToTextController mcontroller ;
 	
-	public KinectSpeechController() {
+	public KinectSpeechController(boolean useKinect) {
 		
 		notePanel = NotePanel.createAndShowGUI();
-		Kinect kinect = new Kinect();
-		kinect.registerGestureListener(this);
+		if(useKinect){
+			Kinect kinect = new Kinect();
+			kinect.registerGestureListener(this);
 		
-		kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
-	
+			kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
+		}
 		
 	}
 	
@@ -64,9 +65,21 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 	}
 	
 	public static void main(String[] args) {
-		KinectSpeechController ksc = new KinectSpeechController();
+		boolean useKinect = true;
+		KinectSpeechController ksc = new KinectSpeechController(useKinect);
+		
+		KinectGesture start = new KinectGesture();
+		start.type ="LEFT";
+		
+		KinectGesture end = new KinectGesture();
+		end.type ="NONE";
+		
 		
 		// wait until return is hit
+		new Scanner(System.in).nextLine();
+		ksc.onReceiveGesture(start);
+		new Scanner(System.in).nextLine();
+		ksc.onReceiveGesture(end);
 		new Scanner(System.in).nextLine();
 	}
 

@@ -90,7 +90,10 @@ public class EventDrivenSpeachToTextController implements Runnable {
 					break;
 				}
 				System.out.println("DEBUG: Recording and waiting, time(rounded sec)= "
-						+ (System.nanoTime() - startTime)/1000000000);
+						+ (System.nanoTime() - startTime)/1000000000
+						+" Thread ID: " 
+						+ Thread.currentThread().getId());
+
 			}
 			mic.close();// Stops recording
 

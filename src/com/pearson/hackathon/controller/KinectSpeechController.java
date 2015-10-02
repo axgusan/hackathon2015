@@ -17,6 +17,7 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 	GSpeechResponseListener speechResponseListener;
 	NotePanel notePanel;
 	EventDrivenSpeachToTextController mcontroller ;
+	boolean audioBeingRecorded = false;
 	
 	public KinectSpeechController(boolean useKinect) {
 		
@@ -39,13 +40,16 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 		if(gesture.type.equals("LEFT")){
 			if(mcontroller!=null)
 				return;
-
-			mcontroller = EventDrivenSpeachToTextController.startAudioCapture(gesture,this);
+			if(!audioBeingRecorded){
+				mcontroller = EventDrivenSpeachToTextController.startAudioCapture(gesture,this);
+			}
 		}
 		if(gesture.type.equals("LEFT_LOW")&&mcontroller!=null){
+			if(!audioBeingRecorded){
+				mcontroller.endAudioCapture();
+				mcontroller=null;
 
-			mcontroller.endAudioCapture();
-			mcontroller=null;
+			}
 		}
 		
 		
@@ -56,6 +60,7 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 		KinectGesture g =(KinectGesture )gesture;
 		
 		notePanel.addNote("normal", answer.getBestGuess());
+		audioBeingRecorded = false;
 		
 	}
 	
@@ -74,12 +79,17 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 		start.type ="LEFT";
 		
 		KinectGesture end = new KinectGesture();
-		end.type ="NONE";
+		end.type ="LEFT_LOW";
 		
 		
 		// wait until return is hit
 		new Scanner(System.in).nextLine();
 		ksc.onReceiveGesture(start);
+		new Scanner(System.in).nextLine();
+		ksc.onReceiveGesture(start);
+		new Scanner(System.in).nextLine();
+		ksc.onReceiveGesture(start);
+		
 		new Scanner(System.in).nextLine();
 		ksc.onReceiveGesture(end);
 		new Scanner(System.in).nextLine();

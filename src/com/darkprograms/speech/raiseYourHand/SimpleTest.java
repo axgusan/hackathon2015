@@ -2,23 +2,19 @@ package com.darkprograms.speech.raiseYourHand;
 
 public class SimpleTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
-		EventDrivenSpeachToTextController mcontroller = new EventDrivenSpeachToTextController();
 		GooglesAnswer theResult = null;
+
+		EventDrivenSpeachToTextController mcontroller = EventDrivenSpeachToTextController.startAudioCapture("a tag", null);
 
 		System.out.println("INFO: Attempting to start audio capture.");
 
-		Thread t = new Thread(mcontroller);
-		t.start();
-
-		try {
+		 
+ 
 			System.out.println("INFO: Waiting for 5 sec while recording.");
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}// Records for 5 seconds
-
+			Thread.sleep(5000); 
+			
 		System.out.println("INFO: Finished 5 sec wait, sending stopRecording.");
 		theResult = mcontroller.endAudioCapture();
 

@@ -1,4 +1,4 @@
-package com.pearson.hackathon.controller;
+package j4kdemo.videoviewerapp;
 
 public interface KinectGestureListener {
 

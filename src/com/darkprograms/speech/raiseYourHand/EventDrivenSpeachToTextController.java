@@ -16,7 +16,22 @@ public class EventDrivenSpeachToTextController implements Runnable {
 	private boolean stopRecording = false;// user initiated stop recording event
 	private boolean messageRecieved = false;// Received reply from google API
 	private long startTime;
+	private SpeechListener listener;
+	private Object tag;
 
+	public static EventDrivenSpeachToTextController startAudioCapture(Object tag, SpeechListener listener){
+		EventDrivenSpeachToTextController mcontroller = new EventDrivenSpeachToTextController();
+
+		mcontroller.tag = tag;
+		mcontroller.listener = listener;
+		System.out.println("INFO: Attempting to start audio capture.");
+
+		Thread t = new Thread(mcontroller);
+		t.start();
+		return mcontroller;
+	}
+	
+	
 	public void run() {
 		System.out.println("DEBUG: Start Audio capture request recieved.");
 		// Instantiate the API
@@ -24,7 +39,7 @@ public class EventDrivenSpeachToTextController implements Runnable {
 				ConfigVariables.GOOGLE_API_KEY);
 
 			// reinitialize in case reused
-		boolean stopRecording = false;
+		 stopRecording = false;
 
 		// Adds the listener
 		dup.addResponseListener(new GSpeechResponseListener() {
@@ -48,7 +63,9 @@ public class EventDrivenSpeachToTextController implements Runnable {
 						+ "% probability.");
 				System.out.println("DEBUG: other guesses : "
 						+ gr.getOtherPossibleResponses());
-
+				if(listener != null){
+					listener.onReceived(tag, googleSaid);
+				}
 			}
 		}); // end addResponseListener
 
@@ -108,3 +125,5 @@ public class EventDrivenSpeachToTextController implements Runnable {
 	}
 
 }
+
+	

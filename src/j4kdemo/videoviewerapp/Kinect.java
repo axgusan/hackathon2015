@@ -12,8 +12,12 @@ public class Kinect extends J4KSDK {
 	public static final double MOVE_AREA = 0.2;
 	
 	VideoPanel viewer=null;
-	VideoFrame videoTexture; 
- 
+	VideoFrame videoTexture;
+
+	private KinectGestureListener registerGestureListener; 
+	private KinectGesture prevGesture = new KinectGesture();
+	
+	
 	public static void main(String[] args) {
 		Kinect kinect = new Kinect();
 		kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
@@ -62,27 +66,43 @@ public class Kinect extends J4KSDK {
     	  //only tracked skeletons contain any date
     	  if(currentSkeleton.isTracked()){
     		 
+    		  KinectGesture gesture = new KinectGesture();
+    		  gesture.type = "NONE";
     		   // We have determined that raising or lowering the hand (or any joint) causes the Y coordinate of the joint to increase or decrease.
     		   // Thus we can test if the Y coordinate of the left hand is greater than the Y coordinate of the head. 
-    		   if( (currentSkeleton.get3DJointY(Skeleton.HAND_LEFT)>currentSkeleton.get3DJointY(Skeleton.HEAD)) && (currentSkeleton.get3DJointY(Skeleton.HAND_RIGHT)>currentSkeleton.get3DJointY(Skeleton.HEAD)) )
+    		   if( (currentSkeleton.get3DJointY(Skeleton.HAND_LEFT)>currentSkeleton.get3DJointY(Skeleton.HEAD)) 
+    				   && (currentSkeleton.get3DJointY(Skeleton.HAND_RIGHT)>currentSkeleton.get3DJointY(Skeleton.HEAD)) )
    		       {
    			       System.out.println("Both hands are raised above the head!!!!!!!!!!!!!!!");
+   			       
+   			       gesture.type = "BOTH";
    		       }
     		   else if(currentSkeleton.get3DJointY(Skeleton.HAND_LEFT)>currentSkeleton.get3DJointY(Skeleton.HEAD) )
     		   {
     			   System.out.println("The LEFT hand is raised above the head!!!!!!!!!!!!!!!");
+    			   gesture.type = "LEFT";
     		   }
     		   else if(currentSkeleton.get3DJointY(Skeleton.HAND_RIGHT)>currentSkeleton.get3DJointY(Skeleton.HEAD) )
     		   {
     			   System.out.println("The RIGHT hand is raised above the head!!!!!!!!!!!!!!!");
+    			   gesture.type = "LEFT";
     		   }
     		   
+    		   if(! gesture.equals(prevGesture)){
+    			   this.registerGestureListener.onReceiveGesture(gesture);
+    		   }
     	  }
       }
       
-     } 
+     }
+
+	public void registerGestureListener(KinectGestureListener kinectSpeechController) {
+		 this.registerGestureListener =kinectSpeechController;
+		
+	} 
 	
     
  
 
 }
+

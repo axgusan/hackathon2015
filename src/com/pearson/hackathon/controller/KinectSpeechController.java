@@ -2,6 +2,7 @@ package com.pearson.hackathon.controller;
 
 import java.util.Scanner;
 
+import com.darkprograms.speech.microphone.Microphone;
 import com.darkprograms.speech.raiseYourHand.EventDrivenSpeachToTextController;
 import com.darkprograms.speech.raiseYourHand.GooglesAnswer;
 import com.darkprograms.speech.raiseYourHand.SpeechListener;
@@ -11,6 +12,7 @@ import com.pearson.hackathon.ui.NotePanel;
 import j4kdemo.videoviewerapp.Kinect;
 import j4kdemo.videoviewerapp.KinectGesture;
 import j4kdemo.videoviewerapp.KinectGestureListener;
+import javaFlacEncoder.FLACFileWriter;
 
 public class KinectSpeechController implements KinectGestureListener, SpeechListener {
 
@@ -20,7 +22,8 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 	boolean audioBeingRecorded = false;
 	
 	public KinectSpeechController(boolean useKinect) {
-		
+		Microphone mic = new Microphone(FLACFileWriter.FLAC);
+		EventDrivenSpeachToTextController.mic = new Microphone(FLACFileWriter.FLAC);
 		notePanel = NotePanel.createAndShowGUI();
 		if(useKinect){
 			Kinect kinect = new Kinect();
@@ -35,7 +38,6 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 	public void onReceiveGesture(KinectGesture gesture){
 		
 		// when a gesture is received get speech and put it in the ui
-		String speech ;  // = Gspeech.getCurrent
 		
 		if(gesture.type.equals("LEFT")){
 			if(mcontroller!=null)
@@ -59,7 +61,7 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 	public void onReceived(Object gesture, GooglesAnswer answer) {
 		KinectGesture g =(KinectGesture )gesture;
 		
-		notePanel.addNote("normal", answer.getBestGuess());
+		notePanel.addNote("normal", answer.getBestGuess() +"\n");
 		audioBeingRecorded = false;
 		
 	}
@@ -72,7 +74,7 @@ public class KinectSpeechController implements KinectGestureListener, SpeechList
 	}
 	
 	public static void main(String[] args) {
-		boolean useKinect = true;
+		boolean useKinect = false;
 		KinectSpeechController ksc = new KinectSpeechController(useKinect);
 		
 		KinectGesture start = new KinectGesture();

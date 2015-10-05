@@ -63,8 +63,8 @@ public class NotePanel extends JPanel {
 	protected void addStylesToDocument(StyledDocument doc) {
 		// Initialize some styles.
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-
-		Style regular = doc.addStyle("regular", def);
+		StyleConstants.setFontSize(def, 20);
+		Style regular = doc.addStyle("regular", def); 
 		StyleConstants.setFontFamily(def, "SansSerif");
 
 		Style s = doc.addStyle("italic", regular);
@@ -74,10 +74,10 @@ public class NotePanel extends JPanel {
 		StyleConstants.setBold(s, true);
 
 		s = doc.addStyle("small", regular);
-		StyleConstants.setFontSize(s, 10);
+		StyleConstants.setFontSize(s, 15);
 
 		s = doc.addStyle("large", regular);
-		StyleConstants.setFontSize(s, 16);
+		StyleConstants.setFontSize(s, 30);
 
 //		s = doc.addStyle("icon", regular);
 //		StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);

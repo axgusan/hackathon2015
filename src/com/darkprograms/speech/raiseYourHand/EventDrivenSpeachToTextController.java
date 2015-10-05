@@ -3,6 +3,8 @@ package com.darkprograms.speech.raiseYourHand;
 import java.io.File;
 import java.nio.file.Files;
 
+import javax.sound.sampled.AudioSystem;
+
 import javaFlacEncoder.FLACFileWriter;
 
 import com.darkprograms.speech.microphone.Microphone;
@@ -19,7 +21,8 @@ public class EventDrivenSpeachToTextController implements Runnable {
 	private SpeechListener listener;
 	private Object tag;
 
-	public static EventDrivenSpeachToTextController startAudioCapture(Object tag, SpeechListener listener){
+	public static EventDrivenSpeachToTextController startAudioCapture(
+			Object tag, SpeechListener listener) {
 		EventDrivenSpeachToTextController mcontroller = new EventDrivenSpeachToTextController();
 
 		mcontroller.tag = tag;
@@ -30,16 +33,15 @@ public class EventDrivenSpeachToTextController implements Runnable {
 		t.start();
 		return mcontroller;
 	}
-	
-	
+
 	public void run() {
 		System.out.println("DEBUG: Start Audio capture request recieved.");
 		// Instantiate the API
 		final GSpeechDuplex dup = new GSpeechDuplex(
 				ConfigVariables.GOOGLE_API_KEY);
 
-			// reinitialize in case reused
-		 stopRecording = false;
+		// reinitialize in case reused
+		stopRecording = false;
 
 		// Adds the listener
 		dup.addResponseListener(new GSpeechResponseListener() {
@@ -63,7 +65,7 @@ public class EventDrivenSpeachToTextController implements Runnable {
 						+ "% probability.");
 				System.out.println("DEBUG: other guesses : "
 						+ gr.getOtherPossibleResponses());
-				if(listener != null){
+				if (listener != null) {
 					listener.onReceived(tag, googleSaid);
 				}
 			}
@@ -72,29 +74,43 @@ public class EventDrivenSpeachToTextController implements Runnable {
 		// Instantiate microphone and have it record FLAC file.
 		System.out.println("DEBUG: getting the default mic.");
 		Microphone mic = new Microphone(FLACFileWriter.FLAC);
-		System.out.println("DEBUG: default mic dataline is "+mic.getTargetDataLine());
+		System.out.println("DEBUG: default mic dataline is "
+				+ mic.getTargetDataLine());
 
 		// The File to record the buffer to.
 		File file = new File("temp_audio_file.flac");
 
+		try {
+			MicAvailabilityChecker.validateMicAvailability();
+		} catch (MicUnaccessibleException e) {
+			System.out.println("WARN: Mic in use by another thread/program or otherwise not acesible.");
+		}
+
 		System.out.println("DEBUG: Starting recording phase.");
 
 		try {
-			System.out.println("DEBUG: Recording audio.");
-			mic.captureAudioToFile(file);// Begins recording
+			try {
+				System.out.println("DEBUG: Recording audio.");
+				mic.captureAudioToFile(file);// Begins recording
 
+			} catch (Exception e) {
+				System.out.println("ERROR: Unable to get microthone.");
+			}
 			startTime = System.nanoTime();
 
-			while (true){// System.nanoTime() - startTime < ConfigVariables.AUDIO_RECORDING_MAX_LENGTH) {
+			while (true) {// System.nanoTime() - startTime <
+							// ConfigVariables.AUDIO_RECORDING_MAX_LENGTH) {
 				Thread.sleep(1000);
 				if (stopRecording) {
 					System.out.println("DEBUG: recording stopped");
 					break;
 				}
-				System.out.println("DEBUG: Recording and waiting, time(rounded sec)= "
-						+ (System.nanoTime() - startTime)/1000000000
-						+" Thread ID: " 
-						+ Thread.currentThread().getId());
+				System.out
+						.println("DEBUG: Recording and waiting, time(rounded sec)= "
+								+ (System.nanoTime() - startTime)
+								/ 1000000000
+								+ " Thread ID: "
+								+ Thread.currentThread().getId());
 
 			}
 			mic.close();// Stops recording
@@ -123,12 +139,10 @@ public class EventDrivenSpeachToTextController implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		System.out.println("DEBUG: got google reply, transaction complete.");
-		messageRecieved=false;//reinitialize in case will be reused
+		messageRecieved = false;// reinitialize in case will be reused
 		return googleSaid;
 	}
 
 }
-
-	
